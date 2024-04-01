@@ -6,11 +6,9 @@ import * as THREE from "three";
 
 export function Avater(props) {
   const group = useRef();
-  const { animation } = props;
-  const { headFollow, cursorFollow } = useControls({
-    headFollow: false,
-    cursorFollow: false,
-  });
+
+  const { animation, section } = props;
+
   const { nodes, materials } = useGLTF("models/64c6f4cd365cf80d16938a2e.glb");
   const { animations: typingAnimation } = useFBX("animations/Typing.fbx");
   const { animations: standingAnimation } = useFBX(
@@ -31,44 +29,64 @@ export function Avater(props) {
       actions[animation].reset().fadeOut(0.5);
     };
   }, [animation]);
-  useFrame((state) => {
-    if (headFollow) {
-      group.current.getObjectByName("Head").lookAt(state.camera.position);
-    }
-    if (cursorFollow) {
-      const target = new THREE.Vector3(state.mouse.x, state.mouse.y, 1);
-      group.current.getObjectByName("Head").lookAt(target);
-    }
+
+  const textureGlassMaterial = new THREE.MeshStandardMaterial({
+    color: "#000000",
+    transparent: true,
+    opacity: 0.42,
+    wireframe: true,
   });
 
   return (
-    <group {...props} ref={group} dispose={null}>
+    <group
+      {...props}
+      ref={group}
+      dispose={null}
+      scale={0.6}
+      position={[2.175, 1.9, 2.942]}
+      rotation={[0, 14.5, 0]}
+    >
       <group rotation-x={-Math.PI / 2}>
         <primitive object={nodes.Hips} />
         <skinnedMesh
           geometry={nodes.Wolf3D_Body.geometry}
-          material={materials.Wolf3D_Body}
+          material={
+            section === 1 ? textureGlassMaterial : materials.Wolf3D_Body
+          }
           skeleton={nodes.Wolf3D_Body.skeleton}
         />
         <skinnedMesh
           geometry={nodes.Wolf3D_Outfit_Bottom.geometry}
-          material={materials.Wolf3D_Outfit_Bottom}
+          material={
+            section === 1
+              ? textureGlassMaterial
+              : materials.Wolf3D_Outfit_Bottom
+          }
           skeleton={nodes.Wolf3D_Outfit_Bottom.skeleton}
         />
+
         <skinnedMesh
           geometry={nodes.Wolf3D_Outfit_Footwear.geometry}
-          material={materials.Wolf3D_Outfit_Footwear}
+          material={
+            section === 1
+              ? textureGlassMaterial
+              : materials.Wolf3D_Outfit_Footwear
+          }
           skeleton={nodes.Wolf3D_Outfit_Footwear.skeleton}
         />
+
         <skinnedMesh
           geometry={nodes.Wolf3D_Outfit_Top.geometry}
-          material={materials.Wolf3D_Outfit_Top}
+          material={
+            section === 1 ? textureGlassMaterial : materials.Wolf3D_Outfit_Top
+          }
           skeleton={nodes.Wolf3D_Outfit_Top.skeleton}
         />
         <skinnedMesh
           geometry={nodes.Wolf3D_Hair.geometry}
           material={materials.Wolf3D_Hair}
           skeleton={nodes.Wolf3D_Hair.skeleton}
+          wireframe={true}
         />
         <skinnedMesh
           name="EyeLeft"

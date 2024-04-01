@@ -1,42 +1,65 @@
 import React, { useRef, useState, useEffect } from "react";
-import { useGLTF, useTexture } from "@react-three/drei";
+import { useGLTF, useTexture, Html } from "@react-three/drei";
 import * as THREE from "three";
+import { FaItunesNote } from "react-icons/fa6";
+import { motion } from "framer-motion";
 
 export function Home3d(props) {
-  const { nodes, materials } = useGLTF("models/home.gltf");
+  const { nodes } = useGLTF("models/home.gltf");
   const group = useRef();
   const texture = useTexture("textures/Baked.jpg");
-  const [audio] = useState(new Audio("./cat_purring.mp3"));
+  const [cat] = useState(new Audio("./cat_purring.mp3"));
+  const [miusic] = useState(new Audio("./rock.mp3"));
   texture.flipY = false;
   texture.encoding = THREE.sRGBEncoding;
+  const [catPurring, setCatPurring] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const isAudioPlayingRef = useRef(false);
+
+  const { dark, setDark, guitar, setGuitar, book, setBook } = props;
 
   useEffect(() => {
-    if (isPlaying) {
-      audio.play();
+    if (catPurring) {
+      cat.play();
     } else {
-      audio.pause();
+      cat.pause();
     }
-  }, [isPlaying, audio]);
+  }, [catPurring]);
+  useEffect(() => {
+    if (isPlaying) {
+      miusic.play();
+    } else {
+      miusic.pause();
+    }
+  }, [isPlaying]);
 
-  const setPlaying = () => {
-    setIsPlaying(!isPlaying);
+  const setOposite = (X, setX) => {
+    setX(!X);
   };
 
   const textureMatrtial = new THREE.MeshStandardMaterial({
     map: texture,
   });
+  const colors = [
+    "red",
+    "blue",
+    "green",
+    "yellow",
+    "orange",
+    "purple",
+    "pink",
+    "cyan",
+  ];
+  function getRandomColor() {
+    const randomIndex = Math.floor(Math.random() * colors.length);
+    return colors[randomIndex];
+  }
 
-  const textureGlassMaterial = new THREE.MeshStandardMaterial({
-    map: texture,
-    transparent: true,
-    opacity: 0.42,
-  });
   return (
     <group ref={group} {...props} dispose={null}>
       <group name="Scene">
         <mesh
+          onPointerEnter={() => setOposite(catPurring, setCatPurring)}
+          onPointerLeave={() => setOposite(catPurring, setCatPurring)}
           name="cat"
           geometry={nodes.cat.geometry}
           material={textureMatrtial}
@@ -51,6 +74,7 @@ export function Home3d(props) {
           rotation={[2.676, -1.555, 2.668]}
         />
         <mesh
+          onClick={() => setOposite(dark, setDark)}
           name="LAMP"
           geometry={nodes.LAMP.geometry}
           material={textureMatrtial}
@@ -78,6 +102,9 @@ export function Home3d(props) {
           rotation={[-1.627, 0.037, -0.27]}
         />
         <mesh
+          onClick={() => {
+            setOposite(guitar, setGuitar), setBook(false);
+          }}
           name="Guitar1"
           geometry={nodes.Guitar1.geometry}
           material={textureMatrtial}
@@ -138,7 +165,80 @@ export function Home3d(props) {
           rotation={[0, -1.409, 0]}
           scale={0.018}
         />
+        <Html position={[1.3, 3.204, -1.258]}>
+          {isPlaying && (
+            <div className="relative">
+              <motion.div
+                style={{
+                  color: getRandomColor(),
+                  fontSize: "1.5rem",
+                  position: "absolute",
+                }}
+                animate={{
+                  translateY: ["0px", "-30px", "-40px"],
+                  opacity: [0, 1, 0],
+                }}
+                transition={{
+                  duration: 3,
+                  ease: "easeInOut",
+                  times: [0, 0.9, 1],
+                  repeat: Infinity,
+                  repeatDelay: 0,
+                }}
+                onAnimationComplete={() => setNewColor(getRandomColor())}
+              >
+                <FaItunesNote />
+              </motion.div>
+              <motion.div
+                style={{
+                  color: getRandomColor(),
+                  fontSize: "1.5rem",
+                  position: "absolute",
+                  translateX: "5px",
+                  opacity: "0",
+                }}
+                animate={{
+                  translateY: ["0px", "-30px", "-40px"],
+                  opacity: [0, 1, 0],
+                }}
+                transition={{
+                  delay: 2,
+                  duration: 3,
+                  ease: "easeInOut",
+                  times: [0, 0.9, 1],
+                  repeat: Infinity,
+                  repeatDelay: 0,
+                }}
+              >
+                <FaItunesNote />
+              </motion.div>
+              <motion.div
+                style={{
+                  fontSize: "1.5rem",
+                  translateX: "10px",
+                  position: "absolute",
+                }}
+                animate={{
+                  translateY: ["0px", "-30px", "-40px"],
+                  color: [getRandomColor(), getRandomColor(), getRandomColor()],
+                  opacity: [0, 1, 0],
+                }}
+                transition={{
+                  delay: 1,
+                  duration: 3,
+                  ease: "easeInOut",
+                  times: [0, 0.9, 1],
+                  repeat: Infinity,
+                  repeatDelay: 0,
+                }}
+              >
+                <FaItunesNote />
+              </motion.div>
+            </div>
+          )}
+        </Html>
         <mesh
+          onClick={() => setOposite(isPlaying, setIsPlaying)}
           name="Headphones"
           geometry={nodes.Headphones.geometry}
           material={textureMatrtial}
@@ -155,6 +255,10 @@ export function Home3d(props) {
           scale={0.019}
         />
         <mesh
+          onClick={() => {
+            setOposite(book, setBook);
+            setGuitar(false);
+          }}
           name="Books"
           geometry={nodes.Books.geometry}
           material={textureMatrtial}
@@ -193,4 +297,4 @@ export function Home3d(props) {
   );
 }
 
-useGLTF.preload("models/home3D.gltf");
+useGLTF.preload("models/home.gltf");

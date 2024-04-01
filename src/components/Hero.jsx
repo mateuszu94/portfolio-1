@@ -4,6 +4,7 @@ import React, { useRef } from "react";
 import { SlLocationPin } from "react-icons/sl";
 import { BsArrowDownRight } from "react-icons/bs";
 import { motion, useScroll, useTransform } from "framer-motion";
+import AnimateLetters from "@/lib/amiateLetters";
 
 const googleLocation =
   "https://www.google.com/maps/place/Osiedle+Dywizjonu+303+39,+31-874+Krak%C3%B3w/@50.0840436,20.0121277,17z/data=!3m1!4b1!4m6!3m5!1s0x47164507b5a00331:0x209d93637bf545e1!8m2!3d50.0840436!4d20.0121277!16s%2Fg%2F11ghzvt3yn?entry=ttu";
@@ -29,7 +30,7 @@ const Hero = () => {
           </p>
         </div>
         <Link href={googleLocation} target="blank">
-          <div className="text-4xl ml-5 mr-2 mt-2 ">
+          <div className="text-4xl ml-5 mr-2 mt-2 hover:text-red-600 ">
             <SlLocationPin />
           </div>
         </Link>
@@ -38,11 +39,17 @@ const Hero = () => {
         <BsArrowDownRight />
         <h2 className="font-mono p-4">
           {" "}
-          Aspirującey <br /> Full stac Developer
+          Aspirującey <br />{" "}
+          <AnimateLetters
+            letterClass={"font-bold"}
+            str={" Full stac Developer"}
+          />
         </h2>
       </div>
       <motion.div className="absolute bottom-10 " style={{ x }}>
-        <h1 className="text-white text-8xl">Mateusz Ukleja</h1>
+        <h1 className="text-white text-8xl">
+          <AnimateLetters str={"Mateusz Ukleja"} daley={1} />
+        </h1>
       </motion.div>
     </motion.div>
   );
