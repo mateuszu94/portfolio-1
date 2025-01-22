@@ -4,7 +4,7 @@ import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
 import { useAtom } from "jotai";
 import { currentProjectAtom, projects } from "./Projects";
 
-const ProjectsSection = () => {
+const ProjectsSection = ({ setIsHovered }) => {
   const [currentProject, setCurrentProject] = useAtom(currentProjectAtom);
   const nextProject = () => {
     setCurrentProject((currentProject + 1) % projects.length);
@@ -13,14 +13,24 @@ const ProjectsSection = () => {
     setCurrentProject((currentProject - 1 + projects.length) % projects.length);
   };
   return (
-    <div className="flex flex-row gap-10 h-full w-screen justify-center items-end translate-y-[-10rem] ">
-      <Button onClick={() => prevroject()}>
+    <div className="flex cursor-none flex-row gap-10 h-full w-screen justify-center items-end translate-y-[-10rem] ">
+      <Button
+        className="cursor-none"
+        onMouseEnter={() => setIsHovered(1)}
+        onMouseLeave={() => setIsHovered(0)}
+        onClick={() => prevroject()}
+      >
         <BsArrowLeft></BsArrowLeft> Poprzedni
       </Button>
       <h2 className="text-2xl  font-sans text-bold text-white textShadow text-center ">
         Projekty
       </h2>
-      <Button onClick={() => nextProject()}>
+      <Button
+        className="cursor-none"
+        onMouseEnter={() => setIsHovered(1)}
+        onMouseLeave={() => setIsHovered(0)}
+        onClick={() => nextProject()}
+      >
         Nastempny <BsArrowRight />
       </Button>
     </div>

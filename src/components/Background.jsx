@@ -16,13 +16,13 @@ const Background = () => {
   useEffect(() => {
     tl.current = gsap.timeline();
     tl.current.to(color.current, {
-      color: "#EDF6F9",
+      color: "#A8DADC",
     });
     tl.current.to(color.current, {
-      color: "#FFDDD2",
+      color: "#457B9D",
     });
     tl.current.to(color.current, {
-      color: "#E29578",
+      color: "#1D3557",
     });
   }, []);
   useFrame(() => {

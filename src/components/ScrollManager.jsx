@@ -12,10 +12,11 @@ const ScrollManager = (props) => {
   data.fill.classList.add("top-0");
   data.fill.classList.add("absolute");
 
-  useEffect(() => {
+  const scrollToSection = (targetSection) => {
+    const targetScroll = targetSection * data.el.clientHeight;
     gsap.to(data.el, {
       duration: 1,
-      scrollTop: section * data.el.clientHeight,
+      scrollTop: targetScroll,
       onStart: () => {
         isAnimated.current = true;
       },
@@ -23,25 +24,45 @@ const ScrollManager = (props) => {
         isAnimated.current = false;
       },
     });
+  };
+
+  useEffect(() => {
+    scrollToSection(section);
+    console.log(section);
   }, [section]);
+
+  let isChangingSection = false;
 
   useFrame(() => {
     if (isAnimated.current) {
       lastScroll.current = data.scroll.current;
       return;
     }
+
     const curSection = Math.floor(data.scroll.current * data.pages);
-    if (data.scroll.current > lastScroll.current && curSection === 0) {
-      onSectionChange(1);
+
+    if (!isChangingSection) {
+      if (data.scroll.current > lastScroll.current) {
+        if (curSection === 0) {
+          onSectionChange(1);
+        } else if (curSection === 1 && data.scroll.current > 0.4) {
+          onSectionChange(2);
+        } else if (curSection === 2 && data.scroll.current > 0.7) {
+          onSectionChange(3);
+        }
+      }
+
+      if (
+        data.scroll.current < lastScroll.current &&
+        data.scroll.current < 1 / (data.pages - 1)
+      ) {
+        onSectionChange(0);
+      }
     }
-    if (
-      data.scroll.current < lastScroll.current &&
-      data.scroll.current < 1 / (data.pages - 1)
-    ) {
-      onSectionChange(0);
-    }
+
     lastScroll.current = data.scroll.current;
   });
+
   return null;
 };
 

@@ -5,9 +5,7 @@ import emailjs from "@emailjs/browser";
 import dotenv from "dotenv";
 dotenv.config();
 
-const Mail = ({ setFoxAnimation }) => {
-  const formRef = useRef(null);
-
+const Mail = ({ setFoxAnimation, setIsHovered }) => {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [isLoading, setIsLoading] = useState(false);
   const handleChange = (e) => {
@@ -108,8 +106,10 @@ const Mail = ({ setFoxAnimation }) => {
             ></textarea>
           </label>
           <Button
+            onMouseEnter={() => setIsHovered(1)}
+            onMouseLeave={() => setIsHovered(0)}
             type="submit"
-            className={"w-[85%]"}
+            className={"w-[85%] cursor-none"}
             disabled={isLoading}
             onFocus={handleFokus}
             onBlur={handleBlur}

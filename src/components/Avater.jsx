@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { useAnimations, useFBX, useGLTF } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
-import { useControls } from "leva";
+
 import * as THREE from "three";
 
 export function Avater(props) {
@@ -24,11 +23,14 @@ export function Avater(props) {
     group
   );
   useEffect(() => {
-    actions[animation].reset().fadeIn(0.5).play();
-    return () => {
-      actions[animation].reset().fadeOut(0.5);
-    };
-  }, [animation]);
+    const targetNode = nodes["Armature"] || nodes["root"];
+    if (actions[animation] && targetNode) {
+      actions[animation].reset().fadeIn(0.5).play();
+      return () => {
+        actions[animation].reset().fadeOut(0.5);
+      };
+    }
+  }, [animation, actions, nodes]);
 
   const textureGlassMaterial = new THREE.MeshStandardMaterial({
     color: "#000000",

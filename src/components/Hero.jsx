@@ -5,18 +5,21 @@ import { SlLocationPin } from "react-icons/sl";
 import { BsArrowDownRight } from "react-icons/bs";
 import { motion, useScroll, useTransform } from "framer-motion";
 import AnimateLetters from "@/lib/amiateLetters";
+import { TypeWriter } from "./TypeWriter";
 
 const googleLocation =
   "https://www.google.com/maps/place/Osiedle+Dywizjonu+303+39,+31-874+Krak%C3%B3w/@50.0840436,20.0121277,17z/data=!3m1!4b1!4m6!3m5!1s0x47164507b5a00331:0x209d93637bf545e1!8m2!3d50.0840436!4d20.0121277!16s%2Fg%2F11ghzvt3yn?entry=ttu";
 
 const Hero = () => {
   const first = useRef(null);
+
   const { scrollYProgress } = useScroll({
     target: first,
     offset: ["end end", "end start"],
   });
 
   const x = useTransform(scrollYProgress, [0, 1], [0, 2000]);
+
   return (
     <motion.div
       ref={first}
@@ -39,10 +42,12 @@ const Hero = () => {
         <BsArrowDownRight />
         <h2 className="font-mono p-4">
           {" "}
-          Aspirującey <br />{" "}
-          <AnimateLetters
-            letterClass={"font-bold"}
-            str={" Full stac Developer"}
+          <TypeWriter
+            str={[
+              "Aspirujący Full-Stack Developer",
+              "Pasja do tworzenia interaktywnych stron i aplikacji",
+            ]}
+            boxColor={"bg-white"}
           />
         </h2>
       </div>
@@ -51,6 +56,7 @@ const Hero = () => {
           <AnimateLetters str={"Mateusz Ukleja"} daley={1} />
         </h1>
       </motion.div>
+      <div className="absolute bottom-0 left-0 right-0 h-96 bg-gradient-to-b from-zinc-950/0 to-zinc-950"></div>
     </motion.div>
   );
 };

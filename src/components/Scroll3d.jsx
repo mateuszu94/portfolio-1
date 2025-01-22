@@ -13,8 +13,17 @@ import Background from "./Background";
 
 const Scroll3d = (props) => {
   const data = useScroll();
-  const { book, setBook, gitar, setGitar, menuOpen, section1, foxAnimation } =
-    props;
+  const {
+    book,
+    setBook,
+    gitar,
+    setGitar,
+    menuOpen,
+    setIsHovered,
+    foxAnimation,
+    isPlaying,
+    setIsPlaying,
+  } = props;
   const [dark, setDark] = useState(false);
   const [section, setSection] = useState(0);
   const [miusic, setMiusic] = useState(false);
@@ -59,6 +68,8 @@ const Scroll3d = (props) => {
           }}
         >
           <Home3d
+            isPlaying={isPlaying}
+            setIsPlaying={setIsPlaying}
             dark={dark}
             setDark={setDark}
             book={book}
@@ -67,6 +78,7 @@ const Scroll3d = (props) => {
             setGuitar={setGitar}
             music={miusic}
             setMusic={setMiusic}
+            setIsHovered={setIsHovered}
           />
         </motion.group>
       </group>
@@ -135,7 +147,7 @@ const Scroll3d = (props) => {
       >
         <Avater section={section} animation={animation} />
       </motion.group>
-      <Projects section={section}></Projects>
+      <Projects section={section} setIsHovered={setIsHovered}></Projects>
       <group>
         <directionalLight
           intensity={2.5}

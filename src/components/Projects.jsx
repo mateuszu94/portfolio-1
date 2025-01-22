@@ -50,44 +50,43 @@ export const projects = [
   },
 ];
 const Project = (props) => {
-  const { project, highlighted } = props;
-
-  const background = useRef();
-  const backgroundOpacity = useMotionValue(0.4);
-
-  useEffect(() => {
-    animate(backgroundOpacity, highlighted ? 0.7 : 0.4);
-  }, [highlighted]);
-
-  useFrame(() => {
-    background.current.material.opacity = backgroundOpacity.get();
-  });
+  const { project } = props;
 
   return (
     <group {...props}>
-      <mesh position-z={-0.001} ref={background}>
+      <mesh position-z={-0.001}>
         <planeGeometry args={[1.5, 1]} />
-        <meshBasicMaterial color={"black"} transparent opacity={0.4} />
+        <meshBasicMaterial
+          color="black"
+          emissiveIntensity={0.2}
+          transparent
+          opacity={0.8}
+          toneMapped={false}
+        />
       </mesh>
+
       <Image
         scale={[1.2, 0.6, 2]}
         url={project.image[0]}
         toneMapped={false}
         position-y={0.1}
       />
+
       <Text
         maxWidth={1}
         anchorX={"left"}
         anchorY={"top"}
+        font=""
         fontSize={0.1}
         position={[-0.4, -0.3, 0]}
+        color={"#f7f6d8"}
       >
         {project.title.toUpperCase()}
       </Text>
     </group>
   );
 };
-const Projects = ({ section }) => {
+const Projects = ({ setIsHovered }) => {
   const { viewport } = useThree();
 
   const [open, setOpen] = useState(-1);
@@ -96,22 +95,26 @@ const Projects = ({ section }) => {
   return (
     <group>
       <motion.group
-        position-y={-viewport.height * 2 - 1}
-        animate={{
-          scale: section === 2 ? 1 : 0,
-          x: section === 2 ? 1 : 5,
+        onPointerEnter={() => {
+          setIsHovered(1);
         }}
+        onPointerLeave={() => setIsHovered(0)}
+        position-y={-viewport.height * 2 - 1}
       >
         {projects.map((project, index) => (
           <motion.group
             key={index}
-            position={[index * 2.5, 0, -3]}
+            position={[index, 0, -3]}
             animate={{
-              x: 0 + (index - currentProject - 1),
+              x: 0 + (index - currentProject * 2.1),
               y: currentProject === index ? 0 : -0.1,
               Z: currentProject === index ? -2 : -3,
               rotateX: currentProject === index ? 0 : -Math.PI / 2,
               rotateZ: currentProject === index ? 0 : -0.1 * Math.PI,
+            }}
+            transition={{
+              duration: 0.4,
+              ease: "easeInOut",
             }}
           >
             <Html position={[index * 0, -8, -0]}>

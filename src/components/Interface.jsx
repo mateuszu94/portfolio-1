@@ -1,6 +1,6 @@
 "use client";
-import React, { useRef, useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import React, { useState } from "react";
+import { AnimatePresence, motion, useTransform } from "framer-motion";
 
 import Image from "next/image";
 import {
@@ -26,14 +26,14 @@ const Section = (props) => {
     <motion.section
       initial={{
         opacity: 0,
-        y: 50,
+        y: 0,
       }}
       whileInView={{
         opacity: 1,
         y: 0,
         transition: {
           duration: 1,
-          delay: 0.5,
+          delay: 0,
         },
       }}
       className={` ml-5 h-screen w-[70vW] max-w-screen-2xl mx-auto
@@ -44,154 +44,166 @@ const Section = (props) => {
   );
 };
 
-const AboutSection = ({ gitar, book }) => {
-  const [isInside, setisInside] = useState(false);
-  const ref = useRef(null);
-
-  useEffect(() => {
-    if (isInside) {
-      setpositionX(x - size);
-      setpositionY(y + size / 2);
-    }
-  });
-  const musicArray = [
-    {
-      name: "Metal",
-      bands: [
-        { name: "metalica", src: "/metalica.png" },
-        { name: "apocaliptyka", src: "/apocaliptyka.jpg" },
-        { name: "metalica", src: "/metalica.png" },
-        { name: "metalica", src: "/metalica.png" },
-      ],
-    },
-    {
-      name: "Rock",
-      bands: [
-        { name: "metalica", src: "/metalica.png" },
-        { name: "metalica", src: "/metalica.png" },
-        { name: "metalica", src: "/metalica.png" },
-        { name: "metalica", src: "/metalica.png" },
-      ],
-    },
-    {
-      name: "Rap",
-      bands: [
-        { name: "metalica", src: "/metalica.png" },
-        { name: "metalica", src: "/metalica.png" },
-        { name: "metalica", src: "/metalica.png" },
-        { name: "metalica", src: "/metalica.png" },
-      ],
-    },
-  ];
-
+const AboutSection = ({ gitar, book, setBook, setGitar }) => {
   return (
     <Section>
-      {gitar && (
-        <motion.div
-          animate={{
-            opacity: [0, 0.5, 1],
-            translateX: ["-100%", "50%", "0%"],
-          }}
-          transition={{
-            duration: 1,
-            ease: "easeInOut",
-            times: [0, 0.5, 1],
-          }}
-          className="flex w-1/2 items-center justify-center flex-col shadow-md shadow-black"
-        >
-          <div className="font-bold font-serif  relative flex h-10 justify-center items-center  text-2xl w-full bg-[#1B3C73] rounded-t-xl">
-            <AnimateLetters str={"Ulubiona Muzyka"} daley={1} />
-            <Button className="w-10 h-10 text-xl absolute p-0 bg-red-500 right-0 rounded-l-none rounded-b-none ">
-              <SlClose />
-            </Button>
-          </div>
-          <Carousel className="bg-white rounded-b-xl">
-            <CarouselContent>
-              {musicArray.map((music) => (
-                <CarouselItem className="flex flex-col w-1/4 items-center py-2 justify-center">
-                  {" "}
-                  <p className="h-10 text-center flex items-center justify-center  font-extrabold text-xl font-mono">
-                    {music.name}
+      <AnimatePresence initial={false}>
+        {book && (
+          <div className=" relative flex flex-row justify-center items-center">
+            <motion.div
+              initial={{
+                opacity: 0,
+                scale: 0,
+              }}
+              animate={{
+                opacity: 1,
+                scale: 1,
+              }}
+              exit={{
+                opacity: 0,
+                scale: 0,
+              }}
+              transition={{ duration: 0.2 }}
+            >
+              <div
+                onClick={() => setBook(false)}
+                className="absolute top-0 right-[-3rem] z-50 rounded-full border-2 border-black w-10 h-10"
+              >
+                {" "}
+                <p className="text-2xl text-center font-extrabold"> x</p>
+              </div>
+              <div className="relative z-30 bg-[#F4A261] w-[55vh] rounded-full h-[55vh] bottom-[4rem]   left-40">
+                <div className="flex  w-full h-full flex-row rounded-full justify-center items-center">
+                  <p className="text-center text-lg">
+                    Co do literatury interesuje sie fantastyką ,psychologią
+                    ,finansami , i Warhammer 40K Polecane książki: -infinite and
+                    divine,Seria wiedzmina,12 rules for life
                   </p>
-                  <div className="grid grid-cols-2 w-1/2  gap-1 ">
-                    {" "}
-                    {music.bands.map((band) => (
-                      <div>
-                        {" "}
-                        <Image
-                          onClick={() => {}}
-                          className="w-full shadow-md hover:shadow-black cursor-pointer hover:border-2 hover:border-slate-500 hover:rounded-md  ease-in-out duration-100"
-                          src={band.src}
-                          width={100}
-                          height={100}
-                          alt={band.name}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>{" "}
-          </Carousel>
-        </motion.div>
-      )}
-      {book && <div>hjkhjk</div>}
-      {!gitar && !book && (
-        <div ref={ref} className="relative z-30">
-          <div>
-            <h1 className=" text-6xl font-bold leading-relaxed">
-              {" "}
-              <span>Witaj jestem</span>
-              <br />
-              <span className="bg-blue-600 rounded-full ml-32 mt-4 text-black italic p-2">
-                Mateusz
-              </span>
-            </h1>
-            <h2 className="ml-52 font-bold">
-              Jestem aspirujacym full stack developerem
-            </h2>
+                </div>
+              </div>
+              <div className="absolute z-20 bg-[#2A9D8F] w-[45vh] rounded-full h-[45vh] bottom-[8rem] left-30" />
+              <div className="absolute z-20 bg-[#3A86FF] w-[27vh] rounded-full h-[27vh] bottom-[15rem] left-[30rem]" />
+              <div className="absolute z-10 bg-[#8338EC] w-[27vh] rounded-full h-[27vh] bottom-[7rem] left-[30rem]" />
+              <div className="absolute z-10 bg-[#1D3557] w-[45vh] rounded-full h-[45vh] bottom-[3rem] left-36" />
+            </motion.div>
           </div>
+        )}
+      </AnimatePresence>{" "}
+      <AnimatePresence initial={false}>
+        {!gitar && !book && (
           <motion.div
-            className="mask absolute top-0"
+            className="relative z-30"
+            initial={{
+              opacity: 0,
+              scale: 0,
+            }}
             animate={{
-              WebkitMaskPosition: [
-                `0% 0%`,
-                `50% 50%`,
-                `150% 50%`,
-                `160% -160%`,
-              ],
-              WebkitMaskSize: ["4rem", "20rem", "20rem", "4rem"],
+              opacity: 1,
+              scale: 1,
             }}
-            transition={{
-              duration: 3,
-              ease: "easeInOut",
-              times: [0, 0.6, 0.8, 1],
-              repeat: Infinity,
-              repeatDelay: 0,
+            exit={{
+              opacity: 0,
+              scale: 0,
             }}
+            transition={{ duration: 0.2 }}
           >
-            <h1 className="text-6xl font-bold text-white textShadow leading-relaxed">
-              {" "}
-              <span>Witaj jestem</span>
-              <br />
-              <span className="bg-black rounded-full ml-32 mt-4 textShadow text-blue-600 italic p-2">
-                Mateusz
-              </span>
-            </h1>
-            <h2 className="ml-52 font-bold text-white textShadow">
-              Jestem aspirujacym full stack developerem
-            </h2>
-            <h2 className="ml-52 text-3xl font-bold text-white textShadow">
-              Poznaj mnie bardziej prezeszukujac pokój
-            </h2>
+            <div>
+              <h1 className=" text-6xl font-bold leading-relaxed">
+                {" "}
+                <span>Witaj jestem</span>
+                <br />
+                <span className=" rounded-full ml-32 mt-4  bg-gradient-to-r from-[#980821]  to-[#0072ff] bg-clip-text text-transparent  p-2">
+                  Mateusz
+                </span>
+              </h1>
+              <h2 className="ml-52 font-bold bg-gradient-to-r from-[#8f4e09] to-[#0f40cf]  bg-clip-text text-transparent">
+                Jestem aspirujacym full stack developerem
+              </h2>
+            </div>
+            <motion.div
+              className="mask absolute top-0"
+              animate={{
+                WebkitMaskPosition: [
+                  `0% 0%`,
+                  `50% 50%`,
+                  `150% 50%`,
+                  `160% -160%`,
+                ],
+                WebkitMaskSize: ["4rem", "20rem", "20rem", "4rem"],
+              }}
+              transition={{
+                duration: 3,
+                ease: "easeInOut",
+                times: [0, 0.6, 0.8, 1],
+                repeat: Infinity,
+                repeatDelay: 0,
+              }}
+            >
+              <h1 className="text-6xl font-bold text-white textShadow leading-relaxed">
+                {" "}
+                <span>Witaj jestem</span>
+                <br />
+                <span className="rounded-full ml-32 mt-4     p-2">Mateusz</span>
+              </h1>
+              <h2 className="ml-52 font-bold text-white textShadow">
+                Jestem aspirujacym full stack developerem
+              </h2>
+              <h2 className="ml-52 text-3xl font-bold text-white textShadow">
+                Poznaj mnie bardziej prezeszukujac pokój
+              </h2>
+            </motion.div>
           </motion.div>
-        </div>
-      )}
+        )}{" "}
+      </AnimatePresence>{" "}
+      <AnimatePresence initial={false}>
+        {gitar && (
+          <div className=" relative flex flex-row justify-center items-center">
+            <motion.div
+              initial={{
+                opacity: 0,
+                scale: 0,
+              }}
+              animate={{
+                opacity: 1,
+                scale: 1,
+              }}
+              exit={{
+                opacity: 0,
+                scale: 0,
+              }}
+              transition={{ duration: 0.2 }}
+            >
+              <div
+                onClick={() => setGitar(false)}
+                className="absolute top-0 left-10 z-30 rounded-full border-2 border-black w-10 h-10"
+              >
+                {" "}
+                <p className="text-2xl text-center font-extrabold"> x</p>
+              </div>
+              <div className=" z-10 bg-[#F4A261] w-[55vh]  h-[55vh] top-[4rem]   left-40">
+                <div className=" absolute z-30 w-55[vh] h-[vh] top-1/2    ">
+                  <p className=" text-center text-xl font-mono text-slate-300">
+                    Rock, metal i szanty to takie moje muzyczne trio idealne.
+                    Zawsze gdzieś się przewijały w moim życiu czasem mocniej,
+                    czasem lżej, ale zawsze były blisko. Uwielbiam ten klimat,
+                    gdzie z jednej strony masz energię i moc gitar, a z drugiej
+                    luzne country
+                  </p>
+                </div>
+              </div>
+              <div className="absolute z-20 bg-[#2A9D8F] w-[45vh]  h-[45vh] top-[8rem] left-30" />
+              <div className="absolute z-20 bg-[#3A86FF] w-[27vh]  h-[27vh] top-[15rem] left-[30rem]" />
+              <div className="absolute z-10 bg-[#8338EC] w-[27vh]  h-[27vh] top-[7rem] left-[30rem]" />
+              <div className="absolute z-10 bg-[#1D3557] w-[45vh]  h-[45vh] top-[3rem] left-36" />
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </Section>
   );
 };
 
-const Skills = () => {
+const Skills = ({ setIsHovered }) => {
   const [Open, setOpen] = useState(0);
 
   const backendSkils = [
@@ -321,6 +333,7 @@ const Skills = () => {
           {" "}
           <SkillDisplay
             array={backendSkils}
+            setIsHovered={setIsHovered}
             state={Open}
             setState={setOpen}
             name={"Back-end"}
@@ -329,6 +342,7 @@ const Skills = () => {
           />
           <SkillDisplay
             array={frontendSkills}
+            setIsHovered={setIsHovered}
             state={Open}
             setState={setOpen}
             name={"Front-end"}
@@ -337,6 +351,7 @@ const Skills = () => {
           />
           <SkillDisplay
             array={languagesArray}
+            setIsHovered={setIsHovered}
             state={Open}
             setState={setOpen}
             name={"Języki"}
@@ -345,6 +360,7 @@ const Skills = () => {
           />
           <SkillDisplay
             array={otherSkillsArray}
+            setIsHovered={setIsHovered}
             state={Open}
             setState={setOpen}
             name={"Inne Umiejętności"}
@@ -356,12 +372,26 @@ const Skills = () => {
   );
 };
 
-const SkillDisplay = ({ icon, array, state, setState, name, code }) => {
+const SkillDisplay = ({
+  icon,
+  array,
+  state,
+  setState,
+  name,
+  code,
+  setIsHovered,
+}) => {
   return (
     <>
       <Button
+        onPointerEnter={() => {
+          setIsHovered(1);
+        }}
+        onPointerLeave={() => setIsHovered(0)}
         className={
-          state === code ? `rounded-b-none textShadow` : "m-2 textShadow"
+          state === code
+            ? `rounded-b-none textShadow cursor-none`
+            : "m-2 cursor-none textShadow"
         }
         onClick={() => {
           if (state === code) setState(-1);
@@ -390,7 +420,7 @@ const SkillDisplay = ({ icon, array, state, setState, name, code }) => {
       </Button>
       {state === code && (
         <motion.div
-          className="bg-white w-full"
+          className="bg-white w-full flex flex-wrap p-10 gap-12"
           initial={{
             opacity: 0,
             height: 0,
@@ -408,17 +438,20 @@ const SkillDisplay = ({ icon, array, state, setState, name, code }) => {
         >
           {array.map((x) => (
             <div key={x.name}>
-              <div className="flex flex-row items-center  gap-4 p-1">
-                {x.icon && (
-                  <Image
-                    className="shadow-md rounded-md shadow-black "
-                    src={x.icon}
-                    width={30}
-                    height={30}
-                    alt={x.name}
-                  />
-                )}
-                <p className="font-bold font-serif text-xl ">- {x.name}</p>
+              <div className="block-container  w-20 h-20 ">
+                {" "}
+                <div className="rounded-xl btn-back" />
+                <div className="rounded-xl btn-front flex justify-center items-center ">
+                  {x.icon && (
+                    <Image
+                      className="w-1/2 h-1/2 object-contain "
+                      src={x.icon}
+                      width={30}
+                      height={30}
+                      alt={x.name}
+                    />
+                  )}
+                </div>
               </div>
               {x.percent && (
                 <div className="h-2 w-full bg-gray-200 rounded-full my-2">
@@ -445,17 +478,29 @@ const SkillDisplay = ({ icon, array, state, setState, name, code }) => {
   );
 };
 
-export const Interface = ({ gitar, book, setFoxAnimation }) => {
+export const Interface = ({
+  gitar,
+  book,
+  setFoxAnimation,
+  setGitar,
+  setBook,
+  setIsHovered,
+}) => {
   return (
     <div className="flex flex-col  justify-start  items-start">
-      <AboutSection gitar={gitar} book={book} />
-      <Skills />
+      <AboutSection
+        gitar={gitar}
+        book={book}
+        setBook={setBook}
+        setGitar={setGitar}
+      />
+      <Skills setIsHovered={setIsHovered} />
       <Section>
         {" "}
-        <ProjectsSection />{" "}
+        <ProjectsSection setIsHovered={setIsHovered} />{" "}
       </Section>
       <Section>
-        <Mail setFoxAnimation={setFoxAnimation} />
+        <Mail setFoxAnimation={setFoxAnimation} setIsHovered={setIsHovered} />
       </Section>
     </div>
   );
